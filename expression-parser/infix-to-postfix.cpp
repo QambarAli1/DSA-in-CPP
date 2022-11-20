@@ -29,12 +29,12 @@ int priority(char c)
 }
 int main()
 {
-    char infix[10];
-    strcpy(infix, "(a*b)+c");
-    char postfix[10];
+    char infix[20];
+    strcpy(infix, "(a+b)*(c+d)");
+    char postfix[20];
     strcpy(postfix, "");
     // cout<< infix << endl;
-    char stack[10];
+    char stack[20];
     int top = -1;
     int j = 0;
     // cout<< strlen(infix);
@@ -43,38 +43,40 @@ int main()
         
         if (infix[i] == '(')
         {
-            // cout<< top <<endl; // -1
             stack[++top] = infix[i];
-            // cout<< top <<endl; // 0
         }
-        if (infix[i] == ')')
+        else if (infix[i] == ')')
         {
 
             while (stack[top] != '(')
             {
-                // cout<< "elif" << stack[top] <<endl;
-                postfix[j++] = stack[top--];
+                postfix[j++] = stack[top];
+                top--;
+                continue;
             }
-            top++;
+            stack[top--];
         }
-        if (priority(infix[i]) == 0)
+        else if (priority(infix[i]) == 0)
         {
             postfix[j++] = infix[i];
         }
         else{
-            if (stack[top] == '(' || top == -1)
+            if (stack[top] == '(' || top==-1 )
             {
                 stack[++top] = infix[i];
                 continue;
             }
-            while(top !=-1 && priority(infix[i] < priority(stack[top]))){
+            while(top != -1 && priority(infix[i] <= priority(stack[top]))){
                 postfix[j++] = stack[top--];
+                // top--;
             }
         }
         
     }
-
+    cout << "stack: " << stack << endl;
+    // while(top > 0){
+    //     postfix[j++] = stack[top--];
+    // }
     cout << "postfix: " << postfix << endl;
-
     return 0;
 }
